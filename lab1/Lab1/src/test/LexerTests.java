@@ -70,30 +70,5 @@ public class LexerTests {
 				new Token(EOF, 0, 4, ""));
 	}
 
-	@Test
-	public void testIntLiteral() {
-		runtest("270216", 
-				new Token(INT_LITERAL, 0, 0, "270216"),
-				new Token(EOF, 0, 6, ""));
-	}
-
-	@Test
-	public void testFullStatment() {
-		runtest("if (270216 + \"P@ssw0rd\" == happy_gal94) { return true; }", 
-				new Token(IF, 0, 0, "if"),
-				new Token(LPAREN, 0, 3, "("),
-				new Token(INT_LITERAL, 0, 4, "270216"),
-				new Token(PLUS, 0, 11, "+"),
-				new Token(STRING_LITERAL, 0, 13, "P@ssw0rd"),
-				new Token(EQEQ, 0, 24, "=="),
-				new Token(ID, 0, 27, "happy_gal94"),
-				new Token(RPAREN, 0, 38, ")"),
-				new Token(LCURLY, 0, 40, "{"),
-				new Token(RETURN, 0, 42, "return"),
-				new Token(TRUE, 0, 49, "true"),
-				new Token(SEMICOLON, 0, 53, ";"),
-				new Token(RCURLY, 0, 55, "}"),
-				new Token(EOF, 0, 56, ""));
-	}
 
 }
