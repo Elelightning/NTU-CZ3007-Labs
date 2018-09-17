@@ -22,141 +22,172 @@
 // declaration of start symbol; no need to change this
 %goal Module;
 
-// temporary declaration, you can remove this once you have written all other rules
-%goal Dummy;
-
 /* TODO: Flesh out the rule for Module, and add rules for other nonterminals. Here is an example
          of a rule you may want to add:
          
    Accessibility = PUBLIC
-		  |
+		  | 
 		  ;
   */
 
 Module = MODULE ID LCURLY Imports Declarations RCURLY;
 
-Imports = Imports Import;
-
+Imports = Imports Import
+		| 
+		;
+		
 Import = IMPORT ID SEMICOLON;
 
 Declarations = Declarations Declaration;
 
-Declaration = Function
-	| Field
-	| Type;
+Declaration = FunctionDecl
+			| FieldDecl
+			| TypeDecl
+			;
+			
+FunctionDecl = Accessibility TypeName ID LPAREN ParamList RPAREN LCURLY StatementList RCURLY;
 
-Function = Accessibility TypeName ID LPAREN ParameterList RPAREN LCURLY Statements RCURLY;
+FieldDecl = Accessibility TypeName ID SEMICOLON;
 
-Field = Accessibility TypeName ID SEMICOLON;
+TypeDecl = Accessibility TYPE ID EQL STRING_LITERAL SEMICOLON;
 
-Type = Accessibility TYPE ID EQL STRING_LITERAL SEMICOLON;
 
-Accessibility = PUBLIC
-	|
-	;
 
 TypeName = PrimitiveType
-	| ArrayType
-	| ID
-	; // TODO: ADD MORE
-	
+		| ID
+		| ArrayType
+		;
+		
+		
+ArrayType = ArrayType LBRACKET RBRACKET 
+		| PrimitiveType LBRACKET RBRACKET
+		| ID LBRACKET RBRACKET
+		;
+		
 PrimitiveType = VOID
-	| BOOLEAN
-	| INT;
-	
-// ArrayType = TypeName LBRACKET RBRACKET
-ArrayType = ArrayType LBRACKET RBRACKET
-	| PrimitiveType LBRACKET RBRACKET
-	| ID LBRACKET RBRACKET;
-
-
-ParameterList = Parameter COMMA 
-	| Parameter
-	;
-
+				| BOOLEAN
+				| INT
+				;
+				
+ParamList = ParamList COMMA Parameter
+			| Parameter
+			| 
+			; 
+			
 Parameter = TypeName ID;
+				
+Statement = LocalVarDecl
+			| StatementBlock
+			| IfStatement
+			| WhileStatement
+			| BreakStatement
+			| ReturnStatement
+			| ExprStatement
+			;
 
-Statements = Statements Statement;
+LocalVarDecl = TypeName ID SEMICOLON;
 
-Statement = LocalVariable
-	| BlockStatement
-	| IfStatement
-	| WhileStatment
-	| BreakStatement
-	| ReturnStatement
-	| ExpressionStatement
-	;
+StatementBlock = LCURLY StatementList RCURLY;
 
-LocalVariable = TypeName ID SEMICOLON;
+OptionalElseStatement = ELSE Statement
+					|
+					;
 
-BlockStatement = LCURLY Statements RCURLY;
+StatementList = StatementList SEMICOLON Statement
+				| Statement
+				| 
+				;
 
-IfStatement = IF LPAREN Expression RPAREN Statement ELSE Statement
-	| IF LPAREN Expression RPAREN;
+IfStatement = IF LPAREN Expression RPAREN Statement OptionalElseStatement;
 
-WhileStatment = WHILE LPAREN Expression RPAREN Statement;
+WhileStatement = WHILE LPAREN Expression RPAREN Statement;
 
 BreakStatement = BREAK SEMICOLON;
 
-ReturnStatement = RETURN SEMICOLON
-	| RETURN Expression SEMICOLON; 
+ReturnStatement = RETURN OptionalExpr SEMICOLON;
 
-ExpressionStatement = Expression SEMICOLON;
+OptionalExpr = Expression
+			| 
+			;
+			
+ExprStatement = Expression SEMICOLON;
 
 Expression = Assignment
-	| RHSExpression;
+			| RHSExpr
+			;
+			
+Assignment = LHSExpr EQL Expression;
 
-Assignment = LHSExpression EQL Expression;
+LHSExpr = ID
+		| ArrayAccess
+		;
+		
+ArrayAccess = LHSExpr LPAREN Expression RPAREN;
 
-LHSExpression = ID
-	| ArrayAccess;
+RHSExpr = ArithmeticExpr OptionalArithmeticExpr;
 
-ArrayAccess = LHSExpression LBRACKET Expression RBRACKET;
+OptionalArithmeticExpr = ComparisonOp ArithmeticExpr
+						| 
+						;
+						
+ComparisonOp = EQEQ
+			| NEQ
+			| LT
+			| LEQ
+			| GT
+			| GEQ
+			;
 
-RHSExpression = ArithmeticExpression
-	| ArithmeticExpression ComparisonOperator ArithmeticExpression;
+ArithmeticExpr = Term AdditiveOp ArithmeticExpr
+				| Term
+				;
 
-ComparisonOperator = EQEQ
-	| NEQ
-	| LT
-	| LEQ
-	| GT
-	| GEQ;
+AdditiveOp = PLUS
+			| MINUS
+			;				
 
-ArithmeticExpression = ArithmeticExpression AdditiveOperator Term
-	| ArithmeticExpression Term;
-
-AdditiveOperator = PLUS
-	| MINUS;
-
-Term = Term MultiplicativeOperator Factor
-	| Term Factor;
-
-MultiplicativeOperator = TIMES
-	| DIV
-	| MOD;
-
-Factor = MINUS Factor
-	| MINUS PrimaryExpression;
+Term = Term MultiplicativeOp Factor
+	| Factor
+	;
 	
-PrimaryExpression = LHSExpression
-	| FunctionCall
-	| ArrayExpression
-	| STRING_LITERAL
-	| INT_LITERAL
-	| TRUE
-	| FALSE
-	| ParenthesisedExpression;
+MultiplicativeOp = TIMES
+				| DIV
+				| MOD
+				;
+				
+Factor = MINUS Factor
+		| PrimaryExpr
+		;
+		
+PrimaryExpr = LHSExpr
+			| FunctionCall
+			| ArrayExpr
+			| STRING_LITERAL
+			| INT_LITERAL
+			| BooleanLiteral
+			| ParenthesisedExpr
+			;
+			
+BooleanLiteral = TRUE
+				| FALSE
+				;
+				
+ParenthesisedExpr = LPAREN Expression RPAREN;
+			
+FunctionCall = ID LPAREN ExpressionList RPAREN;
 
-FunctionCall = ID LPAREN ExpressionStatement RPAREN;
+ExpressionList = ExpressionList COMMA Expression
+				| Expression
+				| 
+				;
+				
+				
+ArrayExpr = LPAREN ExpressionListNonEmpty RPAREN;
 
-ArrayExpression = LBRACKET ExpressionStatement RBRACKET;
+ExpressionListNonEmpty = Expression COMMA ExpressionList;
 
-ParenthesisedExpression = LPAREN Expression RPAREN;
-
+Accessibility = PUBLIC
+		  | 
+		  ;		
 
 /**/
-
-/* Dummy rule to make the lexer compile. Remove this once you have written all other rules. */	  
-Dummy = MODULE INT VOID IF ELSE WHILE RETURN BREAK BOOLEAN PUBLIC TRUE FALSE INT_LITERAL STRING_LITERAL ID TYPE IMPORT
-           PLUS MINUS TIMES DIV MOD EQEQ NEQ LEQ GEQ LT GT LBRACKET RPAREN COMMA RCURLY LCURLY SEMICOLON RBRACKET LPAREN EQL;
