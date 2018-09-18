@@ -38,7 +38,9 @@ Imports = Imports Import
 		
 Import = IMPORT ID SEMICOLON;
 
-Declarations = Declarations Declaration;
+Declarations = Declarations Declaration
+				| 
+				; 
 
 Declaration = FunctionDecl
 			| FieldDecl
@@ -69,7 +71,7 @@ PrimitiveType = VOID
 				| INT
 				;
 				
-ParamList = ParamList COMMA Parameter
+ParamList = Parameter COMMA ParamList
 			| Parameter
 			| 
 			; 
@@ -89,9 +91,6 @@ LocalVarDecl = TypeName ID SEMICOLON;
 
 StatementBlock = LCURLY StatementList RCURLY;
 
-OptionalElseStatement = ELSE Statement
-					|
-					;
 
 StatementList = StatementList SEMICOLON Statement
 				| Statement
@@ -99,6 +98,10 @@ StatementList = StatementList SEMICOLON Statement
 				;
 
 IfStatement = IF LPAREN Expression RPAREN Statement OptionalElseStatement;
+
+OptionalElseStatement = ELSE Statement
+					|
+					;
 
 WhileStatement = WHILE LPAREN Expression RPAREN Statement;
 
