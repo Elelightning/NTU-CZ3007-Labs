@@ -55,4 +55,13 @@ public class ParserTests {
 		runtest("module Test { int x }", false);
 	}
 	
+	@Test
+	public void testModuleB() {
+		runtest("module test { import y; }", true);
+	}
+	
+	@Test
+	public void testModuleBB() {
+		runtest("module test { import y }", false);
+	}
 }
