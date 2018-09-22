@@ -35,6 +35,36 @@ public class ParserTests {
 
 	@Test
 	public void testEmptyModule() {
-		runtest("module Test { }");
+		runtest("module Test { }", true);
+	}
+	
+	/* For the following test modules, the naming is as follows:
+	 * Tests scheduled to pass: testModuleX()
+	 * Tests scheduled not to pass: testModuleXX()
+	 * 
+	 * X can be any letter of the Alphabet. 
+	 */
+	
+	@Test
+	public void testModuleA() {
+		runtest("module Test "
+				+ "{ "
+				+ "public int x; "
+				+ "int y; "
+				+ "public string[] TestFunction (int a, bool b, int[] c, string d) "
+				+ "{ "
+				+ "int z;"
+				+ "z = 1000; "
+				+ "x = z + a; "
+				+ "if (a == b) "
+				+ "return null; "
+				+ "else "
+				+ "{ return true; } "
+				+ "} "
+				+ "void TestNull () "
+				+ "{ "
+				+ "} "
+				+ "} "
+				, true);
 	}
 }
