@@ -232,7 +232,7 @@ ArrayExpr
 	;
 
 ExpressionListNonEmpty 
-	= Expression COMMA ExpressionListNonEmpty
+	= ExpressionListNonEmpty COMMA Expression
 	| Expression
 	;
 
