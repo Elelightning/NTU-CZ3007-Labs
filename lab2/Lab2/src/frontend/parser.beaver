@@ -22,175 +22,228 @@
 // declaration of start symbol; no need to change this
 %goal Module;
 
-/* TODO: Flesh out the rule for Module, and add rules for other nonterminals. Here is an example
-         of a rule you may want to add:
-         
-   Accessibility = PUBLIC
-		  | 
-		  ;
-  */
 
-Module = MODULE ID LCURLY Imports Declarations RCURLY;
+Module
+	= MODULE ID LCURLY Imports Declarations RCURLY
+	;
 
-Imports = Imports Import
-		| 
-		;
+Imports
+	= Imports Import
+	| 
+	;
 		
-Import = IMPORT ID SEMICOLON;
+Import
+	= IMPORT ID SEMICOLON
+	;
 
-Declarations = Declarations Declaration
-				| 
-				; 
+Declarations
+	= Declarations Declaration
+	| 
+	; 
 
-Declaration = FunctionDecl
-			| FieldDecl
-			| TypeDecl
-			;
+Declaration
+	= FunctionDecl
+	| FieldDecl
+	| TypeDecl
+	;
 			
-FunctionDecl = Accessibility TypeName ID LPAREN ParamList RPAREN LCURLY StatementList RCURLY;
+FunctionDecl
+	= Accessibility TypeName ID LPAREN ParameterList RPAREN LCURLY StatementList RCURLY
+	;
 
-FieldDecl = Accessibility TypeName ID SEMICOLON;
+FieldDecl
+	= Accessibility TypeName ID SEMICOLON
+	;
 
-TypeDecl = Accessibility TYPE ID EQL STRING_LITERAL SEMICOLON;
+TypeDecl
+	= Accessibility TYPE ID EQL STRING_LITERAL SEMICOLON
+	;
 
+Accessibility
+	= PUBLIC
+	| 
+	;
 
+TypeName
+	= PrimitiveType
+	| ArrayType
+	| ID
+	;
 
-TypeName = PrimitiveType
-		| ID
-		| ArrayType
-		;
+PrimitiveType
+	= VOID
+	| BOOLEAN
+	| INT
+	;
 		
-		
-ArrayType = ArrayType LBRACKET RBRACKET 
-		| PrimitiveType LBRACKET RBRACKET
-		| ID LBRACKET RBRACKET
-		;
-		
-PrimitiveType = VOID
-				| BOOLEAN
-				| INT
-				;
+ArrayType
+	= ArrayType     LBRACKET RBRACKET 
+	| PrimitiveType LBRACKET RBRACKET
+	| ID            LBRACKET RBRACKET
+	;
 				
-ParamList = Parameter COMMA ParamList
-			| Parameter
-			| 
-			; 
+ParameterList
+	= ParameterList COMMA Parameter
+	| Parameter
+	| 
+	; 
 			
-Parameter = TypeName ID;
+Parameter
+	= TypeName ID
+	;
+	
+StatementList
+	= StatementList Statement
+	| 
+	;
 				
-Statement = LocalVarDecl
-			| StatementBlock
-			| IfStatement
-			| WhileStatement
-			| BreakStatement
-			| ReturnStatement
-			| ExprStatement
-			;
+Statement
+	= LocalVarDecl
+	| StatementBlock
+	| IfStatement
+	| WhileStatement
+	| BreakStatement
+	| ReturnStatement
+	| ExprStatement
+	;
 
-LocalVarDecl = TypeName ID SEMICOLON;
+LocalVarDecl
+	= TypeName ID SEMICOLON
+	;
 
-StatementBlock = LCURLY StatementList RCURLY;
+StatementBlock
+	= LCURLY StatementList RCURLY
+	;
 
+IfStatement
+	= IF LPAREN Expression RPAREN Statement OptionalElseStatement
+	;
 
-StatementList = StatementList SEMICOLON Statement
-				| Statement
-				| 
-				;
+OptionalElseStatement
+	= ELSE Statement
+	|
+	;
 
-IfStatement = IF LPAREN Expression RPAREN Statement OptionalElseStatement;
+WhileStatement
+	= WHILE LPAREN Expression RPAREN Statement
+	;
 
-OptionalElseStatement = ELSE Statement
-					|
-					;
+BreakStatement
+	= BREAK SEMICOLON
+	;
 
-WhileStatement = WHILE LPAREN Expression RPAREN Statement;
+ReturnStatement
+	= RETURN OptionalExpr SEMICOLON
+	;
 
-BreakStatement = BREAK SEMICOLON;
-
-ReturnStatement = RETURN OptionalExpr SEMICOLON;
-
-OptionalExpr = Expression
-			| 
-			;
+OptionalExpr
+	= Expression
+	| 
+	;
 			
-ExprStatement = Expression SEMICOLON;
+ExprStatement
+	= Expression SEMICOLON
+	;
 
-Expression = Assignment
-			| RHSExpr
-			;
+Expression
+	= Assignment
+	| RHSExpr
+	;
 			
-Assignment = LHSExpr EQL Expression;
+Assignment
+	= LHSExpr EQL Expression
+	;
 
-LHSExpr = ID
-		| ArrayAccess
-		;
+LHSExpr
+	= ID
+	| ArrayAccess
+	;
 		
-ArrayAccess = LHSExpr LPAREN Expression RPAREN;
+ArrayAccess
+	= LHSExpr LBRACKET Expression RBRACKET
+	;
 
-RHSExpr = ArithmeticExpr OptionalArithmeticExpr;
+RHSExpr
+	= ArithmeticExpr OptionalArithmeticExpr
+	;
 
-OptionalArithmeticExpr = ComparisonOp ArithmeticExpr
-						| 
-						;
+OptionalArithmeticExpr
+	= ComparisonOp ArithmeticExpr
+	| 
+	;
 						
-ComparisonOp = EQEQ
-			| NEQ
-			| LT
-			| LEQ
-			| GT
-			| GEQ
-			;
+ComparisonOp
+	= EQEQ
+	| NEQ
+	| LT
+	| LEQ
+	| GT
+	| GEQ
+	;
 
-ArithmeticExpr = Term AdditiveOp ArithmeticExpr
-				| Term
-				;
+ArithmeticExpr
+	= ArithmeticExpr AdditiveOp Term
+	| Term
+	;
 
-AdditiveOp = PLUS
-			| MINUS
-			;				
+AdditiveOp 
+	= PLUS
+	| MINUS
+	;				
 
-Term = Term MultiplicativeOp Factor
+Term 
+	= Term MultiplicativeOp Factor
 	| Factor
 	;
 	
-MultiplicativeOp = TIMES
-				| DIV
-				| MOD
-				;
+MultiplicativeOp 
+	= TIMES
+	| DIV
+	| MOD
+	;
 				
-Factor = MINUS Factor
-		| PrimaryExpr
-		;
+Factor 
+	= MINUS Factor
+	| PrimaryExpr
+	;
 		
-PrimaryExpr = LHSExpr
-			| FunctionCall
-			| ArrayExpr
-			| STRING_LITERAL
-			| INT_LITERAL
-			| BooleanLiteral
-			| ParenthesisedExpr
-			;
+PrimaryExpr 
+	= LHSExpr
+	| FunctionCall
+	| ArrayExpr
+	| STRING_LITERAL
+	| INT_LITERAL
+	| BooleanLiteral
+	| ParenthesisedExpr
+	;
 			
-BooleanLiteral = TRUE
-				| FALSE
-				;
-				
-ParenthesisedExpr = LPAREN Expression RPAREN;
-			
-FunctionCall = ID LPAREN ExpressionList RPAREN;
+FunctionCall 
+	= ID LPAREN ExpressionList RPAREN
+	;
 
-ExpressionList = ExpressionList COMMA Expression
-				| Expression
-				| 
-				;
+ExpressionList 
+	= ExpressionList COMMA Expression
+	| Expression
+	| 
+	;
 				
+ArrayExpr 
+	= LBRACKET ExpressionListNonEmpty RBRACKET
+	;
+
+ExpressionListNonEmpty 
+	= Expression COMMA ExpressionListNonEmpty
+	| Expression
+	;
+
+BooleanLiteral 
+	= TRUE
+	| FALSE
+	;
 				
-ArrayExpr = LPAREN ExpressionListNonEmpty RPAREN;
+ParenthesisedExpr 
+	= LPAREN Expression RPAREN
+	;
 
-ExpressionListNonEmpty = Expression COMMA ExpressionList;
-
-Accessibility = PUBLIC
-		  | 
-		  ;		
 
 /**/

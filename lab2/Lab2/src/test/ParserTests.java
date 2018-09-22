@@ -47,21 +47,24 @@ public class ParserTests {
 	
 	@Test
 	public void testModuleA() {
-		runtest("module Test { int x; }", true);
-	}
-	
-	@Test
-	public void testModuleAA() {
-		runtest("module Test { int x }", false);
-	}
-	
-	@Test
-	public void testModuleB() {
-		runtest("module test { import y; }", true);
-	}
-	
-	@Test
-	public void testModuleBB() {
-		runtest("module test { import y }", false);
+		runtest("module Test "
+				+ "{ "
+				+ "public int x; "
+				+ "int y; "
+				+ "public string[] TestFunction (int a, bool b, int[] c, string d) "
+				+ "{ "
+				+ "int z;"
+				+ "z = 1000; "
+				+ "x = z + a; "
+				+ "if (a == b) "
+				+ "return null; "
+				+ "else "
+				+ "{ return true; } "
+				+ "} "
+				+ "void TestNull () "
+				+ "{ "
+				+ "} "
+				+ "} "
+				, true);
 	}
 }
