@@ -134,6 +134,85 @@ public class CompilerTests {
 				new Object[0],
 				42);
 	}
+	
+	@Test public void testSubtraction() {
+		runtest("module Test {" +
+				"  public int f() {" +
+				"    return 40-20;" +
+				"  }" +
+				"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				20);
+	}
+	
+	@Test public void testMultiplication() {
+		runtest("module Test {" +
+				"  public int f() {" +
+				"    return 15*2;" +
+				"  }" +
+				"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				30);
+	}
+	
+	@Test public void testDivision() {
+		runtest("module Test {" +
+				"  public int f() {" +
+				"    return 49/7;" +
+				"  }" +
+				"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				7);
+	}
+	
+	@Test public void testPrecedence() {
+		runtest("module Test {" +
+				"  public int f() {" +
+				"    return 100+10/2;" +
+				"  }" +
+				"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				105);
+	}
+	
+	@Test public void testNegation() {
+		runtest("module Test {" +
+				"  public int f() {" +
+				"    return -100;" +
+				"  }" +
+				"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				-100);
+	}
+	
+	@Test public void testParen() {
+		runtest("module Test {" +
+				"  public int f() {" +
+				"    return (100+10)/2;" +
+				"  }" +
+				"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				55);
+	}
+	
 
 	@Test public void testCond() {
 		runtest("module Test {" +
@@ -149,6 +228,202 @@ public class CompilerTests {
 				new Class<?>[] { boolean.class, int.class, int.class },
 				new Object[] { true, 42, 23 },
 				42);
+	}
+	
+	@Test public void testPosInt() {
+		runtest("module Test {" +
+				"  public int f() {" +
+				"    return 23;" +
+				"  }" +
+				"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				23);
+	}
+	
+	@Test public void testNegInt() {
+		runtest("module Test {" +
+				"  public int f() {" +
+				"    return -23;" +
+				"  }" +
+				"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				-23);
+	}
+	
+	@Test public void testString() {
+		runtest("module Test {" +
+				"  public String f() {" +
+				"    return \"Hello Everyone!\";" +
+				"  }" +
+				"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				"Hello Everyone!");
+	}
+
+	@Test public void testBoolean() {
+		runtest("module Test {" +
+				"  public boolean f() {" +
+				"    return false;" +
+				"  }" +
+				"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				false);
+	}
+	
+	@Test public void testArrayIndex() {
+		runtest("module Test {" +
+				"  public int f() {" +
+						"    int[] a;" +
+						"    int b;" +
+						"    int c;" +
+						"    b = 10;" +
+						"    c = 5;" +
+						"    a = [0,5,10,15,20,b/c];"+
+						"    return a[5];" +
+						"    }"+
+						"}",
+						"Test",
+						"f",
+				new Class<?>[0],
+				new Object[0],
+				2);
+	}
+	
+	@Test public void testAddExpr() {
+		runtest("module Test {" +
+				"  public int f() {" +
+						"    int a;" +
+						"    int b;" +
+						"    a = 10;" +
+						"    b = 5;" +
+						"    return a + b;" +
+						"    }"+
+						"}",
+						"Test",
+						"f",
+				new Class<?>[0],
+				new Object[0],
+				15);
+	}
+	
+	@Test public void testSubExpr() {
+		runtest("module Test {" +
+				"  public int f() {" +
+						"    int a;" +
+						"    int b;" +
+						"    a = 10;" +
+						"    b = 5;" +
+						"    return a - b;" +
+						"    }"+
+						"}",
+						"Test",
+						"f",
+				new Class<?>[0],
+				new Object[0],
+				5);
+	}
+	
+	@Test public void testMulExpr() {
+		runtest("module Test {" +
+				"  public int f() {" +
+						"    int a;" +
+						"    int b;" +
+						"    a = 10;" +
+						"    b = 5;" +
+						"    return a * b;" +
+						"    }"+
+						"}",
+						"Test",
+						"f",
+				new Class<?>[0],
+				new Object[0],
+				50);
+	}
+
+	
+	@Test public void testDivExpr() {
+		runtest("module Test {" +
+				"  public int f() {" +
+						"    int a;" +
+						"    int b;" +
+						"    a = 10;" +
+						"    b = 5;" +
+						"    return a / b;" +
+						"    }"+
+						"}",
+						"Test",
+						"f",
+				new Class<?>[0],
+				new Object[0],
+				2);
+	}
+	
+	@Test public void testModExpr() {
+		runtest("module Test {" +
+				"  public int f() {" +
+						"    int a;" +
+						"    int b;" +
+						"    a = 13;" +
+						"    b = 5;" +
+						"    return a % b;" +
+						"    }"+
+						"}",
+						"Test",
+						"f",
+				new Class<?>[0],
+				new Object[0],
+				3);
+	}
+	
+	@Test public void testBreakStmt() {
+		runtest("module Test {" +
+				"  public int f() {" +
+						"    int a;" +
+						"    a = 10;" +
+						"    while(true){" +
+						"        a = a-1;" +
+						"        if (a == 5) break;" +
+						"        }"+
+						"    return a;"+
+						"    }"+
+						"}",
+						"Test",
+						"f",
+				new Class<?>[0],
+				new Object[0],
+				5);
+	}
+	
+	@Test public void testWhileStmt() {
+		runtest("module Test {" +
+				"  public int f() {" +
+						"    int a;" +
+						"    int b;" +
+						"    a = 10;" +
+						"    b = 5;" +
+						"    while(a > b){" +
+						"        a = a-1;" +
+						"        }"+
+						"    return a;"+
+						"    }"+
+						"}",
+						"Test",
+						"f",
+				new Class<?>[0],
+				new Object[0],
+				5);
 	}
 
 
